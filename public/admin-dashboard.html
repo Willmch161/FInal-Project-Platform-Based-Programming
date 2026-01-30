@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Admin Dashboard Removed</title>
+    <style>
+        body {
+            font-family: Segoe UI, Arial, Helvetica, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #f5f7fb;
+            color: #333
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align:center;">
+        <h1>Admin Dashboard Removed</h1>
+        <p>This page has been removed. Admin functionality is now integrated into the main site.</p>
+        <p><a href="/">Return to Home</a></p>
+    </div>
+</body>
+
+</html>
+<div class="topbar-left">
+    <h2 id="pageTitle">Dashboard</h2>
+</div>
+<div class="topbar-right">
+    <span id="adminUsername" class="admin-user"></span>
+    <div class="admin-avatar">
+        <i class="fas fa-user-circle"></i>
+    </div>
+</div>
+</div>
+
+<!-- Content Area -->
+<div class="admin-content">
+    <!-- Dashboard Tab -->
+    <section id="dashboard-tab" class="tab-content active">
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <div class="stat-icon products">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalProducts">0</h3>
+                    <p>Total Products</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orders">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalOrders">0</h3>
+                    <p>Total Orders</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon users">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalUsers">0</h3>
+                    <p>Total Users</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalRevenue">$0</h3>
+                    <p>Total Revenue</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-section recent-orders">
+            <h3>Recent Orders</h3>
+            <div class="recent-table">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Tab -->
+    <section id="products-tab" class="tab-content">
+        <div class="products-header">
+            <h2>Product Management</h2>
+            <button class="btn btn-primary" onclick="openAddProductModal()">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+        </div>
+
+        <div class="products-filters">
+            <input type="search" id="productSearch" placeholder="Search products..." class="search-box" oninput="filterProducts()">
+            <select id="categoryFilter" class="filter-select" onchange="filterProducts()">
+                            <option value="">All Categories</option>
+                            <option value="Tops">Tops</option>
+                            <option value="Bottoms">Bottoms</option>
+                            <option value="Footwear">Footwear</option>
+                            <option value="Outerwear">Outerwear</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Bags">Bags</option>
+                        </select>
+        </div>
+
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populated by JS -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Orders Tab -->
+    <section id="orders-tab" class="tab-content">
+        <h2>Order Management</h2>
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populated by JS -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Users Tab -->
+    <section id="users-tab" class="tab-content">
+        <h2>User Management</h2>
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populated by JS -->
+            </tbody>
+        </table>
+    </section>
+</div>
+</main>
+</div>
+
+<!-- Add/Edit Product Modal -->
+<div id="productModal" class="modal hidden">
+    <div class="modal-content product-form-modal">
+        <button class="btn-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+
+        <h2 id="modalTitle">Add New Product</h2>
+
+        <form id="productForm" onsubmit="handleProductSubmit(event)">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input type="text" id="productName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="Tops">Tops</option>
+                            <option value="Bottoms">Bottoms</option>
+                            <option value="Footwear">Footwear</option>
+                            <option value="Outerwear">Outerwear</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Bags">Bags</option>
+                        </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Price *</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Stock *</label>
+                    <input type="number" id="productStock" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Description *</label>
+                    <textarea id="productDescription" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Material</label>
+                    <input type="text" id="productMaterial">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Dimensions</label>
+                    <input type="text" id="productDimensions">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Care Instructions</label>
+                    <textarea id="productCareInstructions" rows="2"></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Product Image</label>
+                    <div class="image-upload-area">
+                        <input type="file" id="productImage" accept="image/*" onchange="previewImage(event)">
+                        <div id="imagePreview" class="image-preview hidden">
+                            <img id="previewImg" src="" alt="Preview">
+                            <button type="button" class="btn-remove-image" onclick="removeImage()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                            <input type="checkbox" id="productRecommended">
+                            Mark as Recommended
+                        </label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Product</button>
+                <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="modalOverlay" class="modal-overlay hidden" onclick="closeProductModal()"></div>
+
+<script src="js/products.js"></script>
+<script src="js/admin-dashboard.js"></script>
+</body>
+
+</html>

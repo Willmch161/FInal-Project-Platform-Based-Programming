@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Store</title>
+    <title>LUXE – Streetwear Collective</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/modern.css">
 </head>
 
 <body>
@@ -14,84 +15,131 @@
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <h1><i class="fas fa-shopping-cart"></i> E-Store</h1>
-                <nav class="nav">
-                    <a href="#" class="nav-link" onclick="showSection('products')">Products</a>
-                    <a href="#" class="nav-link" onclick="showSection('orders')">My Orders</a>
-                    <div class="nav-controls">
-                        <input id="searchInput" class="search-input" type="search" placeholder="Search products..." oninput="onSearchChange(this.value)">
-                        <button id="cartBtn" class="btn btn-secondary" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span></button>
-                        <button id="authBtn" class="btn btn-primary" onclick="handleAuthClick(event)">Login</button>
-                    </div>
+                <div class="logo">
+                    <h1>LUXE</h1>
+                    <p class="tagline">Streetwear Collective</p>
+                </div>
+
+                <nav class="nav-menu" id="navMenu">
+                    <a href="#" onclick="showSection('products')">Shop</a>
+                    <a href="#" onclick="showSection('orders')">Orders</a>
+                    <a href="#" onclick="showSection('collections')">Collections</a>
+                    <a href="#" onclick="showSection('lookbook')">Lookbook</a>
                 </nav>
+
+                <button id="menuToggle" class="hamburger" aria-label="Toggle menu" onclick="document.getElementById('navMenu').classList.toggle('open')">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="header-controls">
+                    <div class="search-wrapper">
+                        <input id="searchInput" type="search" placeholder="Search..." class="search-input" oninput="onSearchChange(this.value)">
+                        <i class="fas fa-search"></i>
+                    </div>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <button class="user-btn" id="headerUserBtn" onclick="toggleMenuDropdown()">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="headerUserName"></span>
+                            <i class="fas fa-caret-down" id="userMenuArrow"></i>
+                        </button>
+                        <div class="user-menu hidden" id="userMenu">
+                            <button class="menu-item" onclick="showSection('orders'); toggleMenuItem(event, 'orders')">
+                                <span>Orders</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <button class="menu-item" onclick="toggleAuth(); toggleMenuItem(event, 'account')">
+                                <span>Account</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <button class="menu-item" onclick="logout(); toggleMenuItem(event, 'logout')">
+                                <span>Sign Out</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="authBtn" class="btn btn-auth" onclick="handleAuthClick(event)">Sign In</button>
+                    <button id="cartToggle" class="btn btn-cart" onclick="toggleCart()" title="Shopping Cart">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span id="cartCount" class="cart-badge">0</span>
+                    </button>
+                    <div id="adminControls" class="admin-controls hidden" style="margin-left:12px;">
+                        <button id="addProductBtn" class="btn btn-primary" onclick="showAddProductForm()">Add Product</button>
+                    </div>
+                </div>
             </div>
         </header>
 
-        <!-- Success Message Card -->
-        <div id="successModal" class="modal hidden">
-            <div class="modal-content" style="background: white; text-align: center; max-width: 350px;">
-                <div style="padding: 40px 30px;">
-                    <div style="font-size: 60px; margin-bottom: 20px;">✅</div>
-                    <h2 style="color: #333; margin-bottom: 10px;">Welcome Back!</h2>
-                    <p id="successMessage" style="color: #666; font-size: 16px; margin: 20px 0;">You are now logged in</p>
-                    <button class="btn btn-primary" onclick="document.getElementById('successModal').classList.add('hidden')" style="margin-top: 20px;">Continue</button>
+        <!-- Hero Carousel -->
+        <section class="hero">
+            <div class="hero-carousel" id="heroCarousel">
+                <div class="slide active" style="background-image: url('uploads/Blue Pink and Purple Gradient Grainy Neon Bold Modern Technology 3D Illustrative Cyber Security Presentation.png'); background-size: cover; background-position: center;">
+                    <div class="hero-overlay">
+                        <h2 class="hero-title">New Arrivals — Luxe Streetwear</h2>
+                        <p class="hero-sub">Curated drops. Limited runs. Timeless silhouettes.</p>
+                        <div class="hero-cta">
+                            <a href="#" class="btn btn-primary btn-hero" onclick="showSection('products')">Shop Now</a>
+                            <a href="#" class="btn btn-secondary" onclick="showSection('lookbook')">Explore Lookbook</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide" style="background: linear-gradient(120deg,#0b1830 0%, #071022 100%)">
+                    <div class="hero-overlay">
+                        <h2 class="hero-title">Crafted For Night — Statement Pieces</h2>
+                        <p class="hero-sub">Bold designs with premium finishes.</p>
+                        <div class="hero-cta">
+                            <a href="#" class="btn btn-primary btn-hero" onclick="showSection('products')">Shop Collection</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+            <button class="hero-nav prev" id="heroPrev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+            <button class="hero-nav next" id="heroNext" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+        </section>
 
         <!-- Auth Modal -->
         <div id="authModal" class="modal hidden">
             <div class="modal-content auth-modal">
-                <span class="close" onclick="toggleAuth()"><i class="fas fa-times"></i></span>
+                <button class="btn-close" onclick="toggleAuth()"><i class="fas fa-times"></i></button>
 
                 <div class="auth-header">
-                    <div class="auth-icon"><i class="fas fa-lock"></i></div>
                     <h2 id="authTitle">Welcome Back</h2>
-                    <p class="auth-subtitle" id="authSubtitle">Sign in to your account</p>
+                    <p id="authSubtitle">Sign in to your account</p>
                 </div>
 
                 <form id="authForm" onsubmit="handleAuth(event)" class="auth-form">
                     <div id="nameGroup" class="form-group hidden">
-                        <label>Full Name</label>
-                        <input type="text" id="name" placeholder="John Doe" required>
+                        <input type="text" id="name" placeholder="Full Name" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Email Address</label>
-                        <div class="input-icon">
-                            <span class="icon"><i class="fas fa-envelope"></i></span>
-                            <input type="email" id="email" placeholder="you@example.com" required>
-                        </div>
+                        <input type="email" id="email" placeholder="Email Address" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Password</label>
-                        <div class="input-icon">
-                            <span class="icon"><i class="fas fa-key"></i></span>
-                            <input type="password" id="password" placeholder="••••••••" required>
-                        </div>
+                        <input type="password" id="password" placeholder="Password" required>
                     </div>
 
-                    <button type="button" id="authSubmitBtn" class="btn btn-primary full-width auth-btn" onclick="handleAuth({preventDefault: function(){}, target: document.getElementById('authForm')})">
+                    <button type="button" id="authSubmitBtn" class="btn btn-primary full-width" onclick="handleAuth({preventDefault: function(){}, target: document.getElementById('authForm')})">
                         <span id="submitText">Sign In</span>
                     </button>
 
-                    <div class="demo-accounts" id="demoAccounts">
-                        <p class="demo-label">Demo Accounts:</p>
-                        <div class="demo-creds">
-                            <button type="button" class="demo-btn" onclick="fillDemo('user@example.com', 'user123')">
-                                <i class="fas fa-user"></i> User Account
-                            </button>
-                            <button type="button" class="demo-btn" onclick="fillDemo('admin@example.com', 'admin123')">
-                                <i class="fas fa-user-shield"></i> Admin Account
-                            </button>
-                        </div>
-                        <div class="auth-divider">or</div>
+                    <div class="auth-divider"></div>
 
-                        <p class="toggle-text" onclick="toggleAuthMode()">
-                            <span id="toggleText">Don't have an account? Create one</span>
-                        </p>
+                    <div class="demo-accounts" id="demoAccounts">
+                        <p style="text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; color: #999;">Demo Accounts</p>
+                        <button type="button" class="demo-btn" onclick="fillDemo('user@example.com', 'user123')">
+                            User Account
+                        </button>
+                        <button type="button" class="demo-btn" onclick="fillDemo('admin@example.com', 'admin123')">
+                            Admin Account
+                        </button>
                     </div>
+
+                    <p class="toggle-text" onclick="toggleAuthMode()" style="text-align: center; margin-top: 16px;">
+                        <span id="toggleText">Don't have an account? Create one</span>
+                    </p>
                 </form>
             </div>
         </div>
@@ -100,63 +148,341 @@
         <main class="main">
             <!-- Products Section -->
             <section id="products" class="section active">
-                <h2><i class="fas fa-tag"></i> Featured Products</h2>
-                <div class="filters-row">
-                    <div class="categories" id="categoriesList">
-                        <!-- categories rendered here -->
-                    </div>
-                    <div class="product-filters">
-                        <select id="sortSelect" onchange="onSortChange(this.value)">
-                            <option value="default">Sort: Default</option>
-                            <option value="price_asc">Price: Low → High</option>
-                            <option value="price_desc">Price: High → Low</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="admin-controls hidden" id="adminControls">
-                    <button class="btn btn-success" onclick="showAddProductForm()"><i class="fas fa-plus"></i> Add Product</button>
-                </div>
+                <div class="products-wrapper">
+                    <!-- Filters Sidebar -->
+                    <aside class="filters-sidebar">
+                        <h3>Filters</h3>
 
-                <!-- Add Product Form -->
-                <div id="addProductForm" class="form-container hidden">
-                    <h3><i class="fas fa-box"></i> Add New Product</h3>
-                    <form onsubmit="handleAddProduct(event)">
-                        <input type="text" id="productName" placeholder="Product Name" required>
-                        <input type="number" id="productPrice" placeholder="Price" step="0.01" required>
-                        <input type="text" id="productDesc" placeholder="Description" required>
-                        <input type="number" id="productStock" placeholder="Stock" required>
-                        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Create Product</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeAddProductForm()"><i class="fas fa-times"></i> Cancel</button>
-                    </form>
-                </div>
+                        <!-- Size Filter -->
+                        <div class="filter-group">
+                            <button class="filter-title" onclick="toggleFilter(this)">
+                                Size
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-options hidden">
+                                <label><input type="checkbox" value="XS" onchange="applyFilters()"> XS</label>
+                                <label><input type="checkbox" value="S" onchange="applyFilters()"> S</label>
+                                <label><input type="checkbox" value="M" onchange="applyFilters()"> M</label>
+                                <label><input type="checkbox" value="L" onchange="applyFilters()"> L</label>
+                                <label><input type="checkbox" value="XL" onchange="applyFilters()"> XL</label>
+                                <label><input type="checkbox" value="XXL" onchange="applyFilters()"> XXL</label>
+                            </div>
+                        </div>
 
-                <div id="productsList" class="products-grid">
-                    <!-- Products loaded here -->
-                </div>
-                <!-- Cart panel -->
-                <div id="cartPanel" class="cart-panel hidden">
-                    <h3><i class="fas fa-shopping-cart"></i> Cart</h3>
-                    <div id="cartItems"></div>
-                    <div class="cart-footer">
-                        <strong>Total: $<span id="cartTotal">0.00</span></strong>
-                        <button class="btn btn-success" onclick="checkout()">Checkout</button>
-                        <button class="btn btn-secondary" onclick="toggleCart()">Close</button>
+                        <!-- Type Filter -->
+                        <div class="filter-group">
+                            <button class="filter-title" onclick="toggleFilter(this)">
+                                Type
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-options hidden">
+                                <label><input type="checkbox" value="tops" onchange="applyFilters()"> Tops</label>
+                                <label><input type="checkbox" value="bottoms" onchange="applyFilters()"> Bottoms</label>
+                                <label><input type="checkbox" value="footwear" onchange="applyFilters()"> Footwear</label>
+                                <label><input type="checkbox" value="outerwear" onchange="applyFilters()"> Outerwear</label>
+                                <label><input type="checkbox" value="accessories" onchange="applyFilters()"> Accessories</label>
+                            </div>
+                        </div>
+                        <!-- Edit Product Modal (admin) -->
+                        <div id="productEditModal" class="modal hidden">
+                            <div class="modal-content product-form-modal">
+                                <button class="btn-close" onclick="closeProductEditModal()"><i class="fas fa-times"></i></button>
+                                <h2>Edit Product</h2>
+                                <form id="productEditForm" onsubmit="submitProductEdit(event)">
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input id="editProductName" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Price</label>
+                                            <input id="editProductPrice" type="number" step="0.01" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Stock</label>
+                                            <input id="editProductStock" type="number" required />
+                                        </div>
+                                        <div class="form-group full-width">
+                                            <label>Description</label>
+                                            <textarea id="editProductDescription" rows="3"></textarea>
+                                        </div>
+                                        <div class="form-group full-width">
+                                            <label>Image</label>
+                                            <div style="display:flex;align-items:center;gap:10px;">
+                                                <input id="editProductImage" type="file" accept="image/*" />
+                                                <div id="imagePreviewContainer" style="display:none;">
+                                                    <img id="imagePreview" src="" alt="Preview" style="max-width:120px;max-height:80px;" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="button" class="btn btn-secondary" onclick="closeProductEditModal()">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Color Filter -->
+                        <div class="filter-group">
+                            <button class="filter-title" onclick="toggleFilter(this)">
+                                Color
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-options hidden">
+                                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                    <button class="color-swatch" data-color="black" title="Black" style="background:#0b0b0b;" onclick="toggleColor(this)"></button>
+                                    <button class="color-swatch" data-color="white" title="White" style="background:#f5f5f5;" onclick="toggleColor(this)"></button>
+                                    <button class="color-swatch" data-color="gray" title="Gray" style="background:#9aa0a6;" onclick="toggleColor(this)"></button>
+                                    <button class="color-swatch" data-color="navy" title="Navy" style="background:#071022;" onclick="toggleColor(this)"></button>
+                                    <button class="color-swatch" data-color="olive" title="Olive" style="background:#556b2f;" onclick="toggleColor(this)"></button>
+                                    <button class="color-swatch" data-color="beige" title="Beige" style="background:#d6c9b8;" onclick="toggleColor(this)"></button>
+                                </div>
+                                <div style="margin-top:8px;">
+                                    <button class="btn btn-secondary" onclick="clearColorFilters()">Clear Colors</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Filter -->
+                        <div class="filter-group">
+                            <button class="filter-title" onclick="toggleFilter(this)">
+                                Price
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-options hidden">
+                                <div style="padding:8px 0;">
+                                    <input id="priceRange" class="price-range" type="range" min="0" max="500" step="1" value="300" oninput="onPriceRangeChange(this.value)">
+                                    <div class="price-value">Max: $<span id="priceRangeValue">300</span></div>
+                                </div>
+                                <div style="margin-top:8px; display:flex; gap:8px;">
+                                    <button class="btn btn-secondary" onclick="resetPriceRange()">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-secondary" onclick="clearFilters()" style="width: 100%; margin-top: 20px;">Clear Filters</button>
+                    </aside>
+
+                    <!-- Products Grid -->
+                    <div class="products-container">
+                        <div class="section-header">
+                            <h2>New Arrivals — Curated Picks</h2>
+                            <p class="section-subtitle">Minimal, modern streetwear</p>
+                        </div>
+
+                        <div id="productsList" class="products-grid">
+                            <!-- Products loaded here -->
+                        </div>
+                        <!-- Admin Add Product Form (hidden unless admin) -->
+                        <form id="addProductForm" class="add-product-form hidden" onsubmit="handleAddProduct(event)" enctype="multipart/form-data" style="margin-top:20px;">
+                            <input type="hidden" id="productId" value="" />
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                                <input id="productName" placeholder="Product name" required style="flex:1; padding:8px;" />
+                                <input id="productPrice" placeholder="Price" type="number" step="0.01" required style="width:140px; padding:8px;" />
+                                <input id="productStock" placeholder="Stock" type="number" required style="width:100px; padding:8px;" />
+                                <select id="productCategory" style="padding:8px;">
+                                    <option value="Custom">Custom</option>
+                                    <option value="Tops">Tops</option>
+                                    <option value="Bottoms">Bottoms</option>
+                                    <option value="Footwear">Footwear</option>
+                                    <option value="Outerwear">Outerwear</option>
+                                    <option value="Accessories">Accessories</option>
+                                    <option value="Bags">Bags</option>
+                                </select>
+                            </div>
+                            <div style="margin-top:10px; display:flex; gap:10px;">
+                                <input id="productMaterial" placeholder="Material" style="flex:1; padding:8px;" />
+                                <input id="productDimensions" placeholder="Dimensions" style="flex:1; padding:8px;" />
+                            </div>
+                            <div style="margin-top:10px;">
+                                <textarea id="productDesc" placeholder="Description" rows="3" style="width:100%; padding:8px;"></textarea>
+                            </div>
+                            <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
+                                <input id="productImage" type="file" accept="image/*" />
+                                <label style="display:flex; align-items:center; gap:8px;"><input id="productRecommended" type="checkbox" /> Recommended</label>
+                            </div>
+                            <div style="margin-top:10px; display:flex; gap:10px;">
+                                <button type="submit" class="btn btn-primary">Save Product</button>
+                                <button type="button" class="btn btn-secondary" onclick="closeAddProductForm()">Cancel</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </section>
 
             <!-- Orders Section -->
             <section id="orders" class="section hidden">
-                <h2><i class="fas fa-receipt"></i> My Orders</h2>
-                <div id="ordersList" class="orders-list">
-                    <!-- Orders loaded here -->
+                <div class="section-container">
+                    <h2>Order History</h2>
+                    <div id="ordersList" class="orders-list">
+                        <!-- Orders loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Collections Section -->
+            <section id="collections" class="section hidden">
+                <div class="section-container">
+                    <h2>My Collection</h2>
+                    <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 24px;">❤️ Click the heart button on any product to add it to your collection</p>
+                    <div id="collectionList" class="products-grid">
+                        <!-- Collection items loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lookbook Section -->
+            <section id="lookbook" class="section hidden">
+                <div class="section-container">
+                    <h2>Lookbook</h2>
+                    <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 24px;">📖 Styling inspiration & curated looks</p>
+
+                    <!-- Featured Looks Categories -->
+                    <div style="margin-bottom: 40px;">
+                        <h3 style="margin-bottom: 16px; font-size: 18px;">Featured Looks</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px;">
+                            <div style="background: linear-gradient(135deg, rgba(71, 102, 152, 0.3), rgba(212, 175, 55, 0.1)); padding: 20px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.2); cursor: pointer; transition: all 0.3s ease;" onclick="filterLookbookByCategory('street-style')">
+                                <div style="font-size: 24px; margin-bottom: 8px;">🛍️</div>
+                                <h4 style="margin: 0; font-size: 14px;">Street Style</h4>
+                                <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin: 4px 0 0 0;">Urban essentials</p>
+                            </div>
+                            <div style="background: linear-gradient(135deg, rgba(71, 102, 152, 0.3), rgba(212, 175, 55, 0.1)); padding: 20px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.2); cursor: pointer; transition: all 0.3s ease;" onclick="filterLookbookByCategory('casual')">
+                                <div style="font-size: 24px; margin-bottom: 8px;">👟</div>
+                                <h4 style="margin: 0; font-size: 14px;">Casual Comfort</h4>
+                                <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin: 4px 0 0 0;">Relaxed vibes</p>
+                            </div>
+                            <div style="background: linear-gradient(135deg, rgba(71, 102, 152, 0.3), rgba(212, 175, 55, 0.1)); padding: 20px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.2); cursor: pointer; transition: all 0.3s ease;" onclick="filterLookbookByCategory('premium')">
+                                <div style="font-size: 24px; margin-bottom: 8px;">✨</div>
+                                <h4 style="margin: 0; font-size: 14px;">Premium Looks</h4>
+                                <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin: 4px 0 0 0;">Statement pieces</p>
+                            </div>
+                            <div style="background: linear-gradient(135deg, rgba(71, 102, 152, 0.3), rgba(212, 175, 55, 0.1)); padding: 20px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.2); cursor: pointer; transition: all 0.3s ease;" onclick="showAllLookbook()">
+                                <div style="font-size: 24px; margin-bottom: 8px;">🌟</div>
+                                <h4 style="margin: 0; font-size: 14px;">All Looks</h4>
+                                <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin: 4px 0 0 0;">Complete collection</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Styling Tips -->
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; margin-bottom: 32px;">
+                        <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 16px;">💡 Styling Tip</h3>
+                        <p id="stylingTip" style="margin: 0; color: rgba(255, 255, 255, 0.7); line-height: 1.6;">Mix and match your favorite pieces to create unique outfits. Click on the looks above for curated combinations.</p>
+                    </div>
+
+                    <!-- Lookbook Products Grid -->
+                    <div id="lookbookList" class="products-grid">
+                        <!-- Lookbook items loaded here -->
+                    </div>
                 </div>
             </section>
         </main>
 
+        <!-- Product Detail Modal -->
+        <div id="productModal" class="modal hidden">
+            <div class="modal-content product-modal">
+                <button class="btn-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+                <div class="product-modal-content">
+                    <div class="modal-image">
+                        <img id="modalProductImage" src="" alt="Product">
+                    </div>
+                    <div class="modal-details">
+                        <h2 id="modalProductName"></h2>
+                        <p id="modalProductDesc" class="product-description"></p>
+                        <div class="product-pricing">
+                            <span class="price" id="modalProductPrice"></span>
+                            <span class="stock" id="modalProductStock"></span>
+                        </div>
+
+                        <!-- Size Selector -->
+                        <div class="size-selector">
+                            <label>Select Size</label>
+                            <div class="size-options">
+                                <button class="size-btn" data-size="XS" onclick="selectSize(this)">XS</button>
+                                <button class="size-btn" data-size="S" onclick="selectSize(this)">S</button>
+                                <button class="size-btn" data-size="M" onclick="selectSize(this)">M</button>
+                                <button class="size-btn" data-size="L" onclick="selectSize(this)">L</button>
+                                <button class="size-btn" data-size="XL" onclick="selectSize(this)">XL</button>
+                                <button class="size-btn" data-size="XXL" onclick="selectSize(this)">XXL</button>
+                            </div>
+                        </div>
+
+                        <button id="modalAddToCart" class="btn btn-primary full-width" style="margin-top: 30px;">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sliding Cart Drawer -->
+        <div id="cartDrawer" class="cart-drawer hidden">
+            <div class="cart-header">
+                <h2>Shopping Bag</h2>
+                <button class="btn-close" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="cartItemsList" class="cart-items">
+                <!-- Cart items loaded here -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="cartSubtotal">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span>—</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary full-width" onclick="checkout()">Proceed to Checkout</button>
+                <button class="btn btn-secondary full-width" onclick="toggleCart()" style="margin-top: 10px;">Continue Shopping</button>
+            </div>
+        </div>
+
+        <!-- Cart Overlay -->
+        <div id="cartOverlay" class="cart-overlay hidden" onclick="toggleCart()"></div>
+
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; 2026 E-Commerce Store. All rights reserved.</p>
+            <div class="footer-grid">
+                <div>
+                    <h3>LUXE</h3>
+                    <p style="color:var(--text-muted);">Modern streetwear — curated drops and limited editions.</p>
+                    <div class="social-icons" style="margin-top:12px;">
+                        <a href="#"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#"><i class="fab fa-facebook fa-lg"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="#" onclick="showSection('products')">Shop</a>
+                    <a href="#" onclick="showSection('lookbook')">Lookbook</a>
+                    <a href="#" onclick="showSection('orders')">Orders</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+
+                <div>
+                    <h4>Join Our Newsletter</h4>
+                    <div class="newsletter" style="display:flex; margin-top:8px;">
+                        <input type="email" placeholder="Your email" />
+                        <button class="btn btn-primary" style="margin-left:8px;">Subscribe</button>
+                    </div>
+                    <div style="margin-top:16px; color:var(--text-muted); font-size:13px;">We accept:</div>
+                    <div style="margin-top:8px;">
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard" style="margin-left:8px;"></i>
+                        <i class="fab fa-cc-amex" style="margin-left:8px;"></i>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:22px; color:var(--text-muted); font-size:13px;">&copy; 2026 LUXE. All rights reserved.</div>
         </footer>
     </div>
 

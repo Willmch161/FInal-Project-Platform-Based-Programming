@@ -61,12 +61,18 @@ async function handleLogin(event) {
             return;
         }
 
-        // Store token
+        // Store token and user role
         localStorage.setItem('token', data.token);
+        localStorage.setItem('userRole', data.user.role);
+        localStorage.setItem('userName', data.user.name);
         alert(`Welcome, ${data.user.name}!`);
 
-        // Redirect to home page
-        window.location.href = '/';
+        // Redirect based on user role
+        if (data.user.role === 'ADMIN') {
+            window.location.href = '/';
+        } else {
+            window.location.href = '/';
+        }
     } catch (error) {
         console.error('Login error:', error);
         alert('An error occurred. Please try again.');

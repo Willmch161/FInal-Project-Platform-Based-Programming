@@ -4,6 +4,39 @@ let isLoggedIn = false;
 let currentUser = null;
 let authMode = 'login'; // 'login' or 'register'
 
+// Dark Mode Toggle
+function toggleDarkMode() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
+
+    // Save preference to localStorage
+    const isDarkMode = body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode);
+
+    // Update icon
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    if (isDarkMode) {
+        darkModeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        darkModeBtn.style.color = '#ffc107';
+    } else {
+        darkModeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+        darkModeBtn.style.color = '';
+    }
+}
+
+// Load dark mode preference on page load
+function loadDarkModePreference() {
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        const darkModeBtn = document.getElementById('darkModeBtn');
+        if (darkModeBtn) {
+            darkModeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            darkModeBtn.style.color = '#ffc107';
+        }
+    }
+}
+
 // Force login before showing dashboard: disable nav for guests and open modal
 function disableNavigation() {
     document.querySelectorAll('.nav-link').forEach(a => a.classList.add('disabled'));
@@ -32,9 +65,11 @@ function attachFormSubmit() {
 // Try to attach immediately if DOM is ready; otherwise wait for DOMContentLoaded
 if (document.readyState !== 'loading') {
     attachFormSubmit();
+    loadDarkModePreference();
 }
 document.addEventListener('DOMContentLoaded', () => {
     attachFormSubmit();
+    loadDarkModePreference();
 
     const token = localStorage.getItem('token');
     if (token) {
@@ -159,24 +194,27 @@ async function handleAuth(event) {
         if (authMode === 'login') {
             // Store token and user data
             localStorage.setItem('token', data.token);
+            localStorage.setItem('userRole', data.user.role);
+            localStorage.setItem('userName', data.user.name);
             currentUser = data.user;
             isLoggedIn = true;
 
-            // Show success message
-            document.getElementById('successMessage').textContent = `Welcome back, ${data.user.name}!`;
-            document.getElementById('successModal').classList.remove('hidden');
+            // Show success message (fall back to alert if DOM nodes missing)
+            const msgEl = document.getElementById('successMessage');
+            const modalEl = document.getElementById('successModal');
+            if (msgEl && modalEl) {
+                msgEl.textContent = `Welcome back, ${data.user.name}!`;
+                modalEl.classList.remove('hidden');
+                setTimeout(() => modalEl.classList.add('hidden'), 3000);
+            } else {
+                alert(`Welcome back, ${data.user.name}!`);
+            }
 
-            // Close the modal
+            // Close the auth modal and update UI
             toggleAuth();
             updateAuthButton();
             if (typeof loadProducts === 'function') loadProducts();
-            // enable navigation now that user is logged in
             if (typeof enableNavigation === 'function') enableNavigation();
-
-            // Auto-close success modal after 3 seconds
-            setTimeout(() => {
-                document.getElementById('successModal').classList.add('hidden');
-            }, 3000);
         } else {
             alert('Registration successful! You can now login.');
             // after successful registration, attempt to log in automatically
@@ -250,10 +288,43 @@ function updateAuthButton() {
     } else {
         authBtn.textContent = 'Login';
     }
+    // Update header user display
+    const headerUserName = document.getElementById('headerUserName');
+    const userDropdown = document.getElementById('userDropdown');
+    if (headerUserName) headerUserName.textContent = (isLoggedIn && currentUser) ? currentUser.name : '';
+    if (userDropdown) {
+        if (isLoggedIn) userDropdown.classList.remove('hidden');
+        else userDropdown.classList.add('hidden');
+    }
+
     // Remove any inline onclick handlers then add a single listener
     authBtn.onclick = null;
     authBtn.removeEventListener('click', handleAuthClick);
     authBtn.addEventListener('click', handleAuthClick);
+}
+
+// Toggle user menu dropdown
+function toggleMenuDropdown() {
+    const menu = document.getElementById('userMenu');
+    const arrow = document.getElementById('userMenuArrow');
+    if (!menu) return;
+    menu.classList.toggle('hidden');
+    arrow.classList.toggle('active');
+}
+
+// Toggle individual menu items
+function toggleMenuItem(event, action) {
+    event.preventDefault();
+    const btn = event.currentTarget;
+    btn.classList.toggle('active');
+
+    if (action === 'orders') {
+        showSection('orders');
+    } else if (action === 'account') {
+        toggleAuth();
+    } else if (action === 'logout') {
+        logout();
+    }
 }
 
 // Logout
@@ -291,6 +362,10 @@ function showSection(sectionId) {
                 return;
             }
             loadOrders();
+        } else if (sectionId === 'collections') {
+            loadCollections();
+        } else if (sectionId === 'lookbook') {
+            loadLookbook();
         }
     }
 }

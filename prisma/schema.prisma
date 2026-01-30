@@ -23,12 +23,19 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(uuid())
-  name        String
-  price       Float
-  description String
-  stock       Int
-  createdAt   DateTime @default(now())
+  id                  String   @id @default(uuid())
+  name                String
+  category            String   @default("Uncategorized")
+  price               Float
+  description         String
+  stock               Int
+  material            String?
+  dimensions          String?
+  careInstructions    String?
+  image               String?
+  isRecommended       Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model Order {
